@@ -17,7 +17,23 @@ app.use(express.json());
 
 // Takashi — API 1: Car Value
 app.post('/api/car-value', (req, res) => {
-  res.json({ message: 'Taka - Car Value API working' });
+    // Expecting 'model' and 'year' in the request body
+    const { model, year } = req.body;
+
+    try {
+        // Call the calculateCarValue function from the imported module
+        const carValue = calculateCarValue({ model, year });
+        res.json({ carValue }); // Send the calculated value in the response
+    } catch (error) {
+        if (error instanceof APIError) {
+            // Return specific APIError status and message
+            res.status(error.statusCode).json({ error: error.message });
+        } else {
+            // Log and return a generic 500 error for unexpected issues
+            console.error("Internal Server Error:", error);
+            res.status(500).json({ error: "An unexpected error occurred." });
+        }
+    }
 });
 
 
