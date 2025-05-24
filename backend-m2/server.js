@@ -2,6 +2,11 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
+// Import API 1 logic (from src/api1_car_value/carValuation.js)
+// This module is required for Takashi's part
+const { calculateCarValue, APIError } = require('./api1_car_value/carValuation');
+
+
 const app = express();
 const PORT = process.env.PORT;
 
@@ -14,6 +19,7 @@ app.use(express.json());
 app.post('/api/car-value', (req, res) => {
   res.json({ message: 'Taka - Car Value API working' });
 });
+
 
 // Wisony — API 2: Risk Rating
 app.post('/api/risk-rating', (req, res) => {
