@@ -10,6 +10,8 @@ const PORT = process.env.PORT || 3000;
 app.use(cors()); // This lets other websites talk to our API safely.
 app.use(express.json()); // This helps our API understand when you send it JSON data (like car details).
 
+
+// Takashi — API 1: Car Value
 // === Our special tools for calculating car value ===
 
 /**
