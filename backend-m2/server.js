@@ -1,4 +1,5 @@
 const { APIError, calculateCarValue } = require('./api/api1-takashi/carValuation');
+const calculatePremium = require('./api/api3-kerry/quoteCalculator');
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -80,18 +81,33 @@ app.post('/api/car-value', (req, res) => {
 });
 
 // Wisony — API 2: Risk Rating
-app.post('/api/risk-rating', (req, res) => {
-  res.json({ message: 'Wisony - Risk Rating API working' });
+app.get('/api/ping', (req, res) => {
+  res.status(200).json({ message: 'pong' });
 });
 
 // Kerry — API 3: Quote Calculation
 app.post('/api/quote', (req, res) => {
-  res.json({ message: 'Kerry - Quote API working' });
+  const { car_value, risk_rating } = req.body;
+//   const car_value = 6614;
+//   const risk_rating = 5;
+
+  const result = calculatePremium(car_value, risk_rating);
+
+  if (result.error) {
+    return res.status(400).json(result);
+  }
+
+  res.json(result);
 });
 
 // Sonny — API 4: Discount Rate
-app.post('/api/discount-rate', (req, res) => {
-  res.json({ message: 'Sonny - Discount Rate API working' });
+app.get('/api/ping', (req, res) => {
+  res.status(200).json({ message: 'pong' });
+});
+
+
+app.get('/', (req, res) => {
+  res.send('Backend is running');
 });
 
 if (process.env.NODE_ENV !== 'test') {
