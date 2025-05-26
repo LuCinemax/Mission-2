@@ -1,0 +1,39 @@
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Main */
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-self: center;
+    align-items: center;
+    margin-top: -6px;
+    gap: 12px;
+    list-style: none;
+    height: 50px;
+    
+}
+
+/* Minor Adjustments */
+.header li {
+    display: flex;
+    border-right: solid;
+    border-width: 1px;
+    padding-right: 12px;
+    color: #0078D7;
+    font-size: 13px;
+    
+}
+
+/* Links */
+.navCars {
+    background-color: #EFEFEF;
+    padding: 10px 10px 10px 10px;
+    cursor: pointer;
+    border-top: solid #0078D7;
+
+}

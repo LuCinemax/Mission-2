@@ -1,0 +1,86 @@
+/* Global Reset  */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+
+/* Full Container */
+.footerBox {
+    display: flex;
+    flex-direction: column;  
+}
+
+/* Top Section */
+.topFooter {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #999999;
+    font-size: 14px;
+    color: white;
+    padding: 40px 200px 50px 80px;
+    
+}
+
+/* Bottom Section */
+.bottomFooter {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #333333;
+    padding: 20px;
+    height: 60px;  
+    font-size: 16px;
+}
+
+/* Socials Section */
+.social {
+    display: flex;
+    flex-direction: row;
+    color: white;
+    gap: 80px;
+    list-style: none;
+}
+
+.icon {
+    margin: 0px 0px 0px -40px;
+    position: absolute;
+}
+
+.largeIcon {
+    width: 35px;
+    position: absolute;
+    margin: -7px 0px 0px -40px;
+}
+
+/* Copyright */
+.copyright {
+    color: rgb(163, 163, 163);
+    font-size: 11px;
+    font-weight: 100;
+}
+
+/* Hyperlink Adjustments */
+.links {
+    list-style: none;
+}
+
+.links li {
+    margin-bottom: 5px;
+}
+
+.linkTitles {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.5s ease;
+}
+
+a:Hover {
+    color: black;
+}
