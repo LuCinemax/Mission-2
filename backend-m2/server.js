@@ -93,30 +93,35 @@ app.post("/api/quote", (req, res) => {
 });
 
 // Sonny — API 4: Discount Rate
+
 const calculateDiscountRate = (age, yearsOfExperience) => {
+
   // VARIABLES FOR DISCOUNT RATE CALCULATION
-  const MINIMUM_AGE = 25;
+  const MINIMUM_AGE_FOR_DISCOUNT = 25;
   const MINIMUM_YEARS_OF_EXPERIENCE = 5;
   const MAXIMUM_DISCOUNT = 20;
   const MAXIMUM_AGE = 40;
   const MAXIMUM_YEARS_OF_EXPERIENCE = 10;
-  const NO_DISCOUNT = 0;
   const DISCOUNT_AT_FIVE_PERCENT = 5;
+  let discountRate = 0; // Start with no discount
 
-  if (age <= MINIMUM_AGE || yearsOfExperience <= MINIMUM_YEARS_OF_EXPERIENCE)
-    return NO_DISCOUNT;
-
-  let discountRate = NO_DISCOUNT; // To start with
-
-  // These conditions will only be reached if age > 25 AND yearsOfExperience > 5
-  if (age >= MINIMUM_AGE) discountRate += DISCOUNT_AT_FIVE_PERCENT; // Will always add DISCOUNT_AT_FIVE_PERCENT if we get past the first 'if' statement
-  if (yearsOfExperience >= MINIMUM_YEARS_OF_EXPERIENCE)
-    discountRate += DISCOUNT_AT_FIVE_PERCENT; // Will always add DISCOUNT_AT_FIVE_PERCENT if we get past the first 'if' statement
-  if (age >= MAXIMUM_AGE) discountRate += DISCOUNT_AT_FIVE_PERCENT;
-  if (yearsOfExperience >= MAXIMUM_YEARS_OF_EXPERIENCE)
+  if (age < 24 && yearsOfExperience > 5) {
+    return 0; 
+  }
+  if (age >= MINIMUM_AGE_FOR_DISCOUNT) {
     discountRate += DISCOUNT_AT_FIVE_PERCENT;
+  }
+  if (yearsOfExperience >= MINIMUM_YEARS_OF_EXPERIENCE) {
+    discountRate += DISCOUNT_AT_FIVE_PERCENT;
+  }
+  if (age >= MAXIMUM_AGE) {
+    discountRate += DISCOUNT_AT_FIVE_PERCENT;
+  }
+  if (yearsOfExperience >= MAXIMUM_YEARS_OF_EXPERIENCE) {
+    discountRate += DISCOUNT_AT_FIVE_PERCENT;
+  }
 
-  return Math.min(discountRate, MAXIMUM_DISCOUNT); // Caps the discount at 20%
+  return Math.min(discountRate, MAXIMUM_DISCOUNT);
 };
 
 // POST /test endpoint

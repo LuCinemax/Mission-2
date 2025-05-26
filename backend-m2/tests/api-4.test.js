@@ -23,15 +23,14 @@ describe("POST /test Discount Rate API", () => {
       expect(response.body).toEqual({ discount: 0 }); // Expect 0, because age <= 25
     });
 
-    test("should return 0% discount for an older driver with little experience (age 30, exp 5)", async () => {
+    test("should return 10% discount for an older driver with little experience (age 30, exp 5)", async () => {
       const response = await request
         .post("/test")
         .send({ age: 30, yearsOfExperience: 5 });
       expect(response.statusCode).toEqual(200);
-      expect(response.body).toEqual({ discount: 0 }); // Expect 0, because exp <= 5
+      expect(response.body).toEqual({ discount: 10 }); 
     });
 
-    // Valid cases that pass the initial filter (age > 25 AND yearsOfExperience > 5)
     test("should return 10% for age 30 and experience 6", async () => {
       const response = await request.post("/test").send({
         age: 30,
@@ -191,20 +190,20 @@ describe("POST /test Discount Rate API", () => {
   ///////////////////--- BOUNDARY TEST CASES  ---/////////////////////////
 
   describe("Boundary Test Cases (Edge Conditions)", () => {
-    test("should return 0% discount at age 25 and experience 6 (lower boundary of initial filter)", async () => {
+    test("should return 10% discount at age 25 and experience 6 (lower boundary of initial filter)", async () => {
       const response = await request
         .post("/test")
         .send({ age: 25, yearsOfExperience: 6 });
       expect(response.statusCode).toEqual(200);
-      expect(response.body).toEqual({ discount: 0 }); // age <= 25, so 0%
+      expect(response.body).toEqual({ discount: 10 }); 
     });
 
-    test("should return 0% discount at age 26 and experience 5 (lower boundary of initial filter)", async () => {
+    test("should return 10% discount at age 26 and experience 5 (lower boundary of initial filter)", async () => {
       const response = await request
         .post("/test")
         .send({ age: 26, yearsOfExperience: 5 });
       expect(response.statusCode).toEqual(200);
-      expect(response.body).toEqual({ discount: 0 }); // yearsOfExperience <= 5, so 0%
+      expect(response.body).toEqual({ discount: 10 }); 
     });
 
     test("should return 10% discount at age 26 and experience 6 (first non-zero boundary)", async () => {

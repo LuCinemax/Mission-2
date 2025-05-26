@@ -68,7 +68,14 @@ const API = () => {
             </div>
 
             <div className={styles.api4}>
-              API 4
+              <form>
+                <label htmlFor="api4Input">AGE:   </label>
+                <input type="text" id="api4Input" name="api4Input" placeholder="Enter your age here..." />
+                <label htmlFor="api4Output">EXPERIENCE:   </label>
+                <input type="text" id="api4Output" name="api4Output" placeholder="Enter your driving experience here..." readOnly />
+                <br></br>
+                <button type="submit">Submit</button>
+              </form>
             </div>
           </section>
 
