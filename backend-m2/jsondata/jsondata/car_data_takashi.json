@@ -1,0 +1,37 @@
+[
+  {
+    "make": "Honda",
+    "model": "Civic",
+    "year": 2020,
+    "base_value": 25000,
+    "comment": "Valid car entry. Expected to return a calculated carValue."
+  },
+  {
+    "make": "Porsche",
+    "model": "911",
+    "year": 2020,
+    "base_value": 120000,
+    "comment": "Valid car entry. Expected to return a calculated carValue."
+  },
+  {
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2018,
+    "base_value": 18000,
+    "comment": "Valid car entry. Expected to return a calculated carValue."
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2015,
+    "base_value": 10000,
+    "comment": "Valid car entry. Expected to return a calculated carValue."
+  },
+  {
+    "make": "Tesla",
+    "model": "Model 3",
+    "year": 2022,
+    "base_value": 55000,
+    "comment": "Valid car entry. Expected to return a calculated carValue."
+  }
+]

@@ -1,0 +1,5 @@
+{
+  "model": "Civic",
+  "year": 2014,
+  "comment": "Valid single car entry. Expected to return a 200 OK response with a calculated carValue."
+}

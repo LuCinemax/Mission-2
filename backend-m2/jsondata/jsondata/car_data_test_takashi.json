@@ -1,0 +1,77 @@
+[
+  {
+    "make": "Honda",
+    "model": "Civic",
+    "year": 2020,
+    "base_value": 25000,
+    "comment": "Valid car data. Should return a 200 OK response with a calculated carValue."
+  },
+  {
+    "make": "Porsche",
+    "model": "911",
+    "year": 2023,
+    "base_value": 120000,
+    "comment": "Valid car data. Should return a 200 OK response with a calculated carValue."
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2018,
+    "base_value": 18000,
+    "comment": "Valid car data. Should return a 200 OK response with a calculated carValue."
+  },
+  {
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "invalid year",
+    "base_value": 30000,
+    "comment": "Invalid year format (string). Should return a 400 Bad Request with an error message and errorCode E_INVALID_YEAR_FORMAT."
+  },
+  {
+    "make": "Nissan",
+    "model": "",
+    "year": 2022,
+    "base_value": 22000,
+    "comment": "Empty model string. Should return a 400 Bad Request with an error message and errorCode E_EMPTY_MODEL."
+  },
+  {
+    "make": "Audi",
+    "model": 12345,
+    "year": 2021,
+    "base_value": 45000,
+    "comment": "Model is a number. Should return a 400 Bad Request with an error message and errorCode E_INVALID_MODEL_TYPE."
+  },
+  {
+    "make": "BMW",
+    "model": "X5",
+    "year": -2010,
+    "base_value": 60000,
+    "comment": "Negative year. Should return a 400 Bad Request with an error message and errorCode E_INVALID_YEAR_VALUE."
+  },
+  {
+    "make": "Mercedes",
+    "model": "C-Class",
+    "year": null,
+    "base_value": 40000,
+    "comment": "Year is null. Should return a 400 Bad Request with an error message and errorCode E_INVALID_YEAR_VALUE."
+  },
+  {
+    "make": "Hyundai",
+    "model": "Elantra",
+    "year": 2020.5,
+    "base_value": 20000,
+    "comment": "Year is a decimal. Should return a 400 Bad Request with an error message and errorCode E_INVALID_YEAR_VALUE."
+  },
+  {
+    "make": "Mazda",
+    "model": "Miata",
+    "base_value": 28000,
+    "comment": "Missing year. Should return a 400 Bad Request with an error message and errorCode E_MISSING_YEAR."
+  },
+  {
+    "make": "Subaru",
+    "year": 2019,
+    "base_value": 24000,
+    "comment": "Missing model. Should return a 400 Bad Request with an error message and errorCode E_MISSING_MODEL."
+  }
+]
