@@ -6,6 +6,13 @@ require('dotenv').config(); // This helps us use secret keys from a .env file!
 // Initialize the Express application
 const app = express();
 
+// Load a JSON data file
+// Note that the file path is relative to server.js.
+// Takashi Section for API 1
+const carDataSingle = require('./jsondata/car_data_single_takashi.json');
+const carDataTakashi = require('./jsondata/car_data_takashi.json');
+const carDataTestTakashi = require('./jsondata/car_data_test_takashi.json');
+
 // Get the port number from environment variables
 // We tell our server what "door number" (port) to listen on.
 // If .env doesn't say, it'll just use 3000 as  a defualt.
@@ -107,7 +114,24 @@ app.post('/api/car-value', (req, res) => {
             return res.status(200).json(results);
         }
     }
-});  
+}); 
+
+// === New API endpoints to add for Takashi ===
+
+// API 1: Endpoint that returns single test car data
+app.get('/api/test-car-single', (req, res) => {
+res.json(carDataSingle);
+});
+
+// API 1: Endpoint that returns multiple (valid) test car data
+app.get('/api/test-car-batch-valid', (req, res) => {
+res.json(carDataTakashi);
+});
+
+// API 1: Endpoint that returns mixed (valid/invalid) test car data
+app.get('/api/test-car-batch-mixed', (req, res) => {
+res.json(carDataTestTakashi);
+});
    
 // Wisony — API 2: Risk Rating
 app.post('/api/risk-rating', (req, res) => {

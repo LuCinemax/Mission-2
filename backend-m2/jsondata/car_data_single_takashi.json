@@ -1,5 +1,9 @@
 {
+  "id": 12,
   "model": "Civic",
   "year": 2014,
+  "image_url": "https://images.hgmsites.net/hug/2021-honda-civic-sdn_100756987_h.jpg",
   "comment": "Valid single car entry. Expected to return a 200 OK response with a calculated carValue."
 }
+
+

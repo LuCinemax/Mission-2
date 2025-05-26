@@ -1,37 +1,48 @@
 [
   {
+    "id": 1,
     "make": "Honda",
     "model": "Civic",
     "year": 2020,
     "base_value": 25000,
+    "image_url": "https://file.kelleybluebookimages.com/kbb/base/evox/CP/13528/2020-Honda-Civic-front_13528_032_1821x754_BS_cropped.png?downsize=750:*",
     "comment": "Valid car entry. Expected to return a calculated carValue."
   },
   {
+    "id": 2,
     "make": "Porsche",
     "model": "911",
     "year": 2020,
     "base_value": 120000,
+    "image_url": "https://img-new.cgtrader.com/items/2277223/c77280c01a/porsche-911-carrera-s-aerokit-2020-3d-model-max-obj-3ds-fbx-c4d-lwo.jpg",  
     "comment": "Valid car entry. Expected to return a calculated carValue."
   },
   {
+    "id": 3,
     "make": "Toyota",
     "model": "Corolla",
     "year": 2018,
     "base_value": 18000,
+    "image_url": "https://file.kelleybluebookimages.com/kbb/base/evox/CP/13488/2020-Toyota-Corolla-front_13488_032_1809x771_070_cropped.png?downsize=750:*",  
     "comment": "Valid car entry. Expected to return a calculated carValue."
   },
   {
+    "id": 4,
     "make": "Ford",
     "model": "Focus",
     "year": 2015,
     "base_value": 10000,
+    "image_url": "https://www.edmunds.com/assets/m/ford/focus-st/2015/oem/2015_ford_focus-st_4dr-hatchback_base_fq_oem_1_815.jpg",
     "comment": "Valid car entry. Expected to return a calculated carValue."
   },
   {
+    "id": 5,
     "make": "Tesla",
     "model": "Model 3",
     "year": 2022,
     "base_value": 55000,
+    "image_url": "https://www.teslarati.com/wp-content/uploads/2021/10/tesla-model-3-sr-plus-aero-wheels-august-2022.jpg",
     "comment": "Valid car entry. Expected to return a calculated carValue."
   }
 ]
+
