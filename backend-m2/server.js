@@ -15,11 +15,8 @@ const cors = require('cors');
 require('dotenv').config();
 
 const calculatePremium = require("./api/api3-kerry/quoteCalculator");
+const carValueController = require("./api/api1-takashi/controllers/carValueController.js");
 
-const {
-  APIError,
-  calculateCarValue,
-} = require("./api/api1-takashi/carValuation");
 const {
   calculateDiscountRate,
 } = require("./api/api4-sonny/calculateDiscountRate.js");
@@ -27,7 +24,7 @@ const {
 // We bring in the 'carValueController'. This is like a special manager
 // for your car value calculations. It knows what to do when someone asks for a car value.
 // API 1 for Takashi endpoint component from api1-takashi/controllers/carValueController'
-const carValueController = require('./api/api1-takashi/controllers/carValueController');
+
 
 // 2. Setting Up Our Website (Starting to build with our tools)
 
