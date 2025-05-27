@@ -14,6 +14,16 @@ const cors = require('cors');
 // from a hidden '.env' file, so they don't get accidentally shared.
 require('dotenv').config();
 
+const calculatePremium = require("./api/api3-kerry/quoteCalculator");
+
+const {
+  APIError,
+  calculateCarValue,
+} = require("./api/api1-takashi/carValuation");
+const {
+  calculateDiscountRate,
+} = require("./api/api4-sonny/calculateDiscountRate.js");
+
 // We bring in the 'carValueController'. This is like a special manager
 // for your car value calculations. It knows what to do when someone asks for a car value.
 // API 1 for Takashi endpoint component from api1-takashi/controllers/carValueController'
@@ -72,30 +82,64 @@ app.get('/api/test-car-batch-mixed', (req, res) => {
    
 //-------------------------End of Takashi section----------------------------------------------------------------------
 // Wisony — API 2: Risk Rating
-app.post('/api/risk-rating', (req, res) => {
-  res.json({ message: 'Wisony - Risk Rating API working' });
+app.get('/api/ping', (req, res) => {
+  res.status(200).json({ message: 'pong' });
 });
 
 // Kerry — API 3: Quote Calculation
 app.post('/api/quote', (req, res) => {
-  res.json({ message: 'Kerry - Quote API working' });
+  const { car_value, risk_rating } = req.body;
+//   const car_value = 6614;
+//   const risk_rating = 5;
+
+  const result = calculatePremium(car_value, risk_rating);
+
+  if (result.error) {
+    return res.status(400).json(result);
+  }
+
+  res.json(result);
 });
 
 // Sonny — API 4: Discount Rate
-app.post('/api/discount-rate', (req, res) => {
-  res.json({ message: 'Sonny - Discount Rate API working' });
+
+// POST /test endpoint
+app.post("/test", (req, res) => {
+  const { age, yearsOfExperience } = req.body;
+  const NO_AGE = 0;
+  const NO_EXPERIENCE = 0;
+
+  // INPUT VALIDATION
+  if (typeof age !== "number" || typeof yearsOfExperience !== "number") {
+    return res.status(400).json({
+      error: "Invalid input: age and yearsOfExperience must be numbers.",
+    });
+  }
+
+  if (age < NO_AGE || yearsOfExperience < NO_EXPERIENCE) {
+    return res.status(400).json({
+      error: "Invalid input: age and yearsOfExperience must be non-negative.",
+    });
+  }
+
+  const discount = calculateDiscountRate(age, yearsOfExperience);
+
+  // Send the calculated discount in the response
+  res.status(200).json({ discount: discount });
 });
+
 
 // 3. Opening Our Website for Business! (Making the website start running)
 // Start the server only if the environment is not 'test'
 // This prevents the server from starting during test runs (e.g., with Supertest)
-if (process.env.NODE_ENV !== 'test') {
-  // This line tells our website to actually start listening for visitors on the chosen door number (PORT).
-  // Once it starts, it will print a message to the console, so you know it's ready! 
+// This line tells our website to actually start listening for visitors on the chosen door number (PORT).
+// Once it starts, it will print a message to the console, so you know it's ready! 
+if (process.env.NODE_ENV !== "test") {
   app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
   });
 }
+
 
 // Export the Express app instance, primarily for testing frameworks like Supertest
 module.exports = app;

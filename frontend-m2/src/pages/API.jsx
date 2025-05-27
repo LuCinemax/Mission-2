@@ -9,6 +9,7 @@ import userIcon from "../assets/Images/user.png";
 import phoneIcon from "../assets/Images/phone.png";
 import locationIcon from "../assets/Images/location.png";
 
+
 // ====================================================================
 // START OF HELPER COMPONENTS DEFINITIONS
 // IMPORTANT: These components (CarValueHistory, CarValueItem, etc.)
@@ -287,7 +288,24 @@ function CarValueTester({ TEST_DATA_API_URL, CAR_VALUE_API_URL }) {
 // MAIN API COMPONENT DEFINITION
 // ====================================================================
 const API = () => {
+  //Kerry-----------------------------------------------------------------------------------------------
+  const [quote, setQuote] = useState(null);
 
+  useEffect(() => {
+    fetch("http://localhost:4888/api/quote", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        car_value: 6614,
+        risk_rating: 5,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => setQuote(data))
+      .catch((err) => setQuote({ error: "Failed to fetch" }));
+  }, []);
+  
+  //Takashi------------------------------------------------------------------------------------------
   // START OF API 1 (Takashi Section) Logic and State
   // This section contains state variables and functions crucial for the Car Value Evaluation Application.
   // Ensure this code is NOT commented out by accident.
@@ -382,27 +400,43 @@ const API = () => {
 
   return (
     <div>
-    {/* ========######## HEADER SECTION ########======== */}
-      <TopHeader />
+
+      {/* ========######## HEADER ########======== */}
+      <TopHeader></TopHeader>
 
     {/* ========######## TOP LOGO SECTION ########======== */}
       <div className={styles.logoBox}>
         <figure className={styles.logoImage}>
-            {/* Turners Logo */}
+          {/* Turners Logo */}
           <img src={logo} alt="turnerslogo" />
         </figure>
         <ul className={styles.infoSection}>
-          <li><img src={userIcon} alt="" /><a href="https://www.turners.co.nz/Login/?ReturnUrl=/Cars/finance-insurance/car-insurance/">LOGIN</a> OR <a href="https://www.turners.co.nz/Login/Registration/">REGISTER</a></li>
-          <li> <img src={phoneIcon} alt="" /> 0800 887 637</li>
-          <li><img src={locationIcon} alt="" /><a href="https://www.turners.co.nz/Company/Branches/">Find Us</a></li>
-          <li><a href="https://www.turners.co.nz/Company/Branches/">中文</a></li>
+          <li>
+            <img src={userIcon} alt="" />
+            <a href="https://www.turners.co.nz/Login/?ReturnUrl=/Cars/finance-insurance/car-insurance/">
+              LOGIN
+            </a>{" "}
+            OR{" "}
+            <a href="https://www.turners.co.nz/Login/Registration/">REGISTER</a>
+          </li>
+          <li>
+            {" "}
+            <img src={phoneIcon} alt="" /> 0800 887 637
+          </li>
+          <li>
+            <img src={locationIcon} alt="" />
+            <a href="https://www.turners.co.nz/Company/Branches/">Find Us</a>
+          </li>
+          <li>
+            <a href="https://www.turners.co.nz/Company/Branches/">中文</a>
+          </li>
         </ul>
       </div>
 
-    {/* ========######## NAVIGATION BAR ########======== */}
-      <NavBar />
+      {/* ========######## NAVIGATION BAR ########======== */}
+      <NavBar></NavBar>
 
-    {/* ========######## BREADCRUMB NAVIGATOR ########======== */}
+      {/* ========######## BREADCRUMB NAVIGATOR ########======== */}
       <main className={styles.background}>
         <section className={styles.pageBox}>
           <nav className={styles.breadcrumb}>
@@ -410,14 +444,18 @@ const API = () => {
             <span>»</span>
             <a href="https://www.turners.co.nz/Cars/">Cars</a>
             <span>»</span>
-            <a href="https://www.turners.co.nz/Cars/finance-insurance/">Finance & Insurance</a>
+            <a href="https://www.turners.co.nz/Cars/finance-insurance/">
+              Finance & Insurance
+            </a>
             <span>»</span>
-            <a href="https://www.turners.co.nz/Cars/finance-insurance/car-insurance/">Car Insurance</a>
+            <a href="https://www.turners.co.nz/Cars/finance-insurance/car-insurance/">
+              Car Insurance
+            </a>
             <span>»</span>
             <a href="#">API</a>
           </nav>
 
-    {/* ========######## HEAD BANNER ########======== */}
+          {/* ========######## HEAD BANNER ########======== */}
           <figure>
             <img className={styles.financeImg} src={finance} alt="" />
           </figure>
@@ -425,6 +463,7 @@ const API = () => {
           {/* ========######## API OUTPUTS SECTION ########======== */}
 
           <section className={styles.apiContainer}>
+
             <div className={styles.api1}>
               {/* Car Value Evaluation Application integrated here */}
               <div className="min-h-min bg-gray-100 p-4 sm:p-6 lg:p-8 flex items-center justify-center font-sans">
@@ -500,19 +539,43 @@ const API = () => {
               API 2
             </div>
 
+            <div className={styles.api1}>API 1</div>
+
+            <div className={styles.api2}>API 2</div>
+
+
             {/* Placeholder for API 3 */}
             <div className={styles.api3}>
-              API 3
+              <h3>API 3 — Quote Calculation</h3>
+              {quote ? (
+                quote.error ? (
+                  <p>Error: {quote.error}</p>
+                ) : (
+                  <>
+                    <p>Monthly Premium: ${quote.monthly_premium}</p>
+                    <p>Yearly Premium: ${quote.yearly_premium}</p>
+                  </>
+                )
+              ) : (
+                <p>Loading...</p>
+              )}
             </div>
 
             {/* Placeholder for API 4 */}
             <div className={styles.api4}>
-              API 4
+              <form>
+                <label htmlFor="api4Input">AGE:   </label>
+                <input type="text" id="api4Input" name="api4Input" placeholder="Enter your age here..." />
+                <label htmlFor="api4Output">EXPERIENCE:   </label>
+                <input type="text" id="api4Output" name="api4Output" placeholder="Enter your driving experience here..." readOnly />
+                <br></br>
+                <button type="submit">Submit</button>
+              </form>
             </div>
           </section>
+         {/* ========######## FOOTER ########======== */}
+          <Footer></Footer>
 
-        {/* ========######## FOOTER SECTION ########======== */}
-          <Footer />
         </section>
       </main>
     </div>
