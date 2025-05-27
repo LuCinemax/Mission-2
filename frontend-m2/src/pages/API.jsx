@@ -8,31 +8,63 @@ import userIcon from "../assets/Images/user.png";
 import phoneIcon from "../assets/Images/phone.png";
 import locationIcon from "../assets/Images/location.png";
 
+import { useEffect, useState } from "react";
+
 const API = () => {
+  const [quote, setQuote] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost:4888/api/quote", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        car_value: 6614,
+        risk_rating: 5,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => setQuote(data))
+      .catch((err) => setQuote({ error: "Failed to fetch" }));
+  }, []);
 
   return (
     <div>
-    {/* ========######## HEADER ########======== */}
+      {/* ========######## HEADER ########======== */}
       <TopHeader></TopHeader>
 
-    {/* ========######## TOP LOGO SECTION ########======== */}
+      {/* ========######## TOP LOGO SECTION ########======== */}
       <div className={styles.logoBox}>
         <figure className={styles.logoImage}>
-            {/* Turners Logo */}
+          {/* Turners Logo */}
           <img src={logo} alt="turnerslogo" />
         </figure>
         <ul className={styles.infoSection}>
-          <li><img src={userIcon} alt="" /><a href="https://www.turners.co.nz/Login/?ReturnUrl=/Cars/finance-insurance/car-insurance/">LOGIN</a> OR <a href="https://www.turners.co.nz/Login/Registration/">REGISTER</a></li>
-          <li> <img src={phoneIcon} alt="" /> 0800 887 637</li>
-          <li><img src={locationIcon} alt="" /><a href="https://www.turners.co.nz/Company/Branches/">Find Us</a></li>
-          <li><a href="https://www.turners.co.nz/Company/Branches/">中文</a></li>
+          <li>
+            <img src={userIcon} alt="" />
+            <a href="https://www.turners.co.nz/Login/?ReturnUrl=/Cars/finance-insurance/car-insurance/">
+              LOGIN
+            </a>{" "}
+            OR{" "}
+            <a href="https://www.turners.co.nz/Login/Registration/">REGISTER</a>
+          </li>
+          <li>
+            {" "}
+            <img src={phoneIcon} alt="" /> 0800 887 637
+          </li>
+          <li>
+            <img src={locationIcon} alt="" />
+            <a href="https://www.turners.co.nz/Company/Branches/">Find Us</a>
+          </li>
+          <li>
+            <a href="https://www.turners.co.nz/Company/Branches/">中文</a>
+          </li>
         </ul>
       </div>
 
-    {/* ========######## NAVIGATION BAR ########======== */}
+      {/* ========######## NAVIGATION BAR ########======== */}
       <NavBar></NavBar>
 
-    {/* ========######## BREADCRUMB NAVIGATOR ########======== */}
+      {/* ========######## BREADCRUMB NAVIGATOR ########======== */}
       <main className={styles.background}>
         <section className={styles.pageBox}>
           <nav className={styles.breadcrumb}>
@@ -40,14 +72,18 @@ const API = () => {
             <span>»</span>
             <a href="https://www.turners.co.nz/Cars/">Cars</a>
             <span>»</span>
-            <a href="https://www.turners.co.nz/Cars/finance-insurance/">Finance & Insurance</a>
+            <a href="https://www.turners.co.nz/Cars/finance-insurance/">
+              Finance & Insurance
+            </a>
             <span>»</span>
-            <a href="https://www.turners.co.nz/Cars/finance-insurance/car-insurance/">Car Insurance</a>
+            <a href="https://www.turners.co.nz/Cars/finance-insurance/car-insurance/">
+              Car Insurance
+            </a>
             <span>»</span>
             <a href="#">API</a>
           </nav>
 
-    {/* ========######## HEAD BANNER ########======== */}
+          {/* ========######## HEAD BANNER ########======== */}
           <figure>
             <img className={styles.financeImg} src={finance} alt="" />
           </figure>
@@ -55,16 +91,24 @@ const API = () => {
           {/* ========######## API OUTPUTS ########======== */}
 
           <section className={styles.apiContainer}>
-            <div className={styles.api1}>
-              API 1
-            </div>
+            <div className={styles.api1}>API 1</div>
 
-            <div className={styles.api2}>
-              API 2
-            </div>
+            <div className={styles.api2}>API 2</div>
 
             <div className={styles.api3}>
-              API 3
+              <h3>API 3 — Quote Calculation</h3>
+              {quote ? (
+                quote.error ? (
+                  <p>Error: {quote.error}</p>
+                ) : (
+                  <>
+                    <p>Monthly Premium: ${quote.monthly_premium}</p>
+                    <p>Yearly Premium: ${quote.yearly_premium}</p>
+                  </>
+                )
+              ) : (
+                <p>Loading...</p>
+              )}
             </div>
 
             <div className={styles.api4}>
@@ -79,7 +123,7 @@ const API = () => {
             </div>
           </section>
 
-        {/* ========######## FOOTER ########======== */}
+          {/* ========######## FOOTER ########======== */}
           <Footer></Footer>
         </section>
       </main>

@@ -86,6 +86,23 @@ app.post("/api/car-value", (req, res) => {
 });
 
 // Wisony — API 2: Risk Rating
+
+// Kerry — API 3: Quote Calculation
+app.post('/api/quote', (req, res) => {
+  const { car_value, risk_rating } = req.body;
+//   const car_value = 6614;
+//   const risk_rating = 5;
+
+  const result = calculatePremium(car_value, risk_rating);
+
+  if (result.error) {
+    return res.status(400).json(result);
+  }
+
+  res.json(result);
+});
+
+// Sonny — API 4: Discount Rate
 app.post("/api/risk-rating", (req, res) => {
   res.json({ message: "Wisony - Risk Rating API working" });
 });
