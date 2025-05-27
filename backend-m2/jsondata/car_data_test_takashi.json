@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [
   {
     "make": "Honda",
@@ -74,4 +75,37 @@
     "base_value": 24000,
     "comment": "Missing model. Should return a 400 Bad Request with an error message and errorCode E_MISSING_MODEL."
   }
+=======
+[
+  {
+    "make": "Honda",
+    "model": "Civic",
+    "year": 2020,
+    "base_value": 25000
+  },
+  {
+    "make": "Porsche",
+    "model": "911",
+    "year": 2023,
+    "base_value": 120000
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2018,
+    "base_value": 18000
+  },
+  {
+    "make": "Toyota",
+    "model": "Camry",
+    "year": "invalid year",
+    "base_value": 30000
+  },
+  {
+    "make": "Nissan",
+    "model": "",
+    "year": 2022,
+    "base_value": 22000
+  }
+>>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
 ]

@@ -5,12 +5,17 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+<<<<<<< HEAD
     "test": "jest",
     "test:watch": "jest --watch",
     "test:api1": "jest tests/api-1.test.js",
     "test:api2": "jest tests/api-2.test.js",
     "test:api3": "jest tests/api-3.test.js",
     "test:api4": "jest tests/api-4.test.js"
+=======
+    "test": "jest"
+
+>>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
   },
   "keywords": [],
   "author": "",

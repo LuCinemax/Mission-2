@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [
   {
     "make": "Honda",
@@ -35,3 +36,37 @@
     "comment": "Valid car entry. Expected to return a calculated carValue."
   }
 ]
+=======
+    [
+      {
+        "make": "Honda",
+        "model": "Civic",
+        "year": 2020,
+        "base_value": 25000
+      },
+      {
+        "make": "Porsche",
+        "model": "911",
+        "year": 2020,
+        "base_value": 120000
+      },
+      {
+        "make": "Toyota",
+        "model": "Corolla",
+        "year": 2018,
+        "base_value": 18000
+      },
+      {
+        "make": "Ford",
+        "model": "Focus",
+        "year": 2015,
+        "base_value": 10000
+      },
+      {
+        "make": "Tesla",
+        "model": "Model 3",
+        "year": 2022,
+        "base_value": 55000
+      }
+    ]
+>>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
