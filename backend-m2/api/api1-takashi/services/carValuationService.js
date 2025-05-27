@@ -106,11 +106,11 @@ function calculateCarValue({ model, year }) {
     const modelContribution = modelFactor * 50;
 
     // Now, we add up all the parts to get the total estimated car value!
-    let carValue = baseValue + yearContribution + modelContribution;
+    let carValue = (modelFactor * 100) + year; 
 
     // Super important! We make sure the car value is never negative (less than zero).
     // You can't owe money for your car! The lowest value is always $0.
-    carValue = Math.max(0, carValue); // Choose the bigger number: 0 or the calculated value.
+    carValue = Math.max(0, carValue); // Make sure the value is never less than $0.
 
     return carValue; // We tell you the car's value!
 }
