@@ -1,6 +1,6 @@
 const { APIError, calculateCarValue } = require('./api/api1-takashi/carValuation');
 const express = require('express');
-<<<<<<< HEAD
+
 const cors = require('cors');// Middleware for enabling Cross-Origin Resource Sharing
 //Load environment variables from .env file
 require('dotenv').config(); // This helps us use secret keys from a .env file!
@@ -110,7 +110,7 @@ app.post('/api/car-value', (req, res) => {
     }
 });  
    
-=======
+
 const cors = require('cors');
 require('dotenv').config();
 
@@ -190,7 +190,6 @@ app.post('/api/car-value', (req, res) => {
     }
 });
 
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
 // Wisony — API 2: Risk Rating
 app.post('/api/risk-rating', (req, res) => {
   res.json({ message: 'Wisony - Risk Rating API working' });
@@ -206,19 +205,17 @@ app.post('/api/discount-rate', (req, res) => {
   res.json({ message: 'Sonny - Discount Rate API working' });
 });
 
-<<<<<<< HEAD
+
 // Start the server only if the environment is not 'test'
 // This prevents the server from starting during test runs (e.g., with Supertest)
-=======
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
+
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
   });
 }
 
-<<<<<<< HEAD
+
 // Export the Express app instance, primarily for testing frameworks like Supertest
-=======
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
+
 module.exports = app;
