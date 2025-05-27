@@ -79,9 +79,33 @@ app.post('/api/car-value', (req, res) => {
     }
 });
 
+const keywords = ["Crash", "Scratch", "Collide", "Bump", "Smash"];
 // Wisony — API 2: Risk Rating
 app.post('/api/risk-rating', (req, res) => {
-  res.json({ message: 'Wisony - Risk Rating API working' });
+    //Getting the claim_history from user input
+    const { claim_history } = req.body;
+    //Checks if claim history is not a string and if it isn't then will return an error message
+    if(typeof claim_history !== "string"){
+        return res.status(400).json({ error: "Invalid input entered"});
+    }
+    //Checks if claim_history is an empty string and returns an error if it is
+    if(claim_history.trim() === ""){
+        return res.status(400).json({ error: "Invalid input entered"});
+    }
+    //Turning the claim_history from user input into lower case
+    const lowerCaseText = claim_history.toLowerCase();
+    //counts how many keywords are said in the claim_history
+    let count = 0
+    for(const word of keywords){
+        const regex = new RegExp(word, 'gi');
+        const matches = lowerCaseText.match(regex);
+        count += matches ? matches.length : 0;
+    }
+    //checks the length of claim_history and returns an error if its to long
+    if(count > 5){
+        return res.status(400).json({ error: "To many risky event"});
+    }
+    return res.status(200).json({ risk_rating: count })
 });
 
 // Kerry — API 3: Quote Calculation
