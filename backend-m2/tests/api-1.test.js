@@ -1,384 +1,312 @@
-// C:\Level 5\Mission2\Mission-2\backend-m2\tests\api-1.test.js
-
-<<<<<<< HEAD
-const request = require('supertest'); // Supertest for making HTTP requests to the Express app
-// Import your main Express application instance
-=======
 const request = require('supertest');
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
-const app = require('../server'); // Path to your main Express app file
+const app = require('../server'); // Path to your Express app
 
-// Note: Direct imports of calculateCarValue and APIError have been removed.
-// This is because these logics are now consolidated into server.js.
-// From now on, we will directly test the /api/car-value endpoint through the Express app (app).
-
-<<<<<<< HEAD
-// Calculating car values for valid inputs.
-// Handling edge cases for model names (single letter, mixed casing, special characters).
-// Returning appropriate 400 Bad Request errors with specific error messages and codes
-// for invalid or missing inputs (like missing model/year, invalid year format, negative year, empty strings, etc.).
-// Processing batch requests (arrays of cars), correctly calculating valid entries,
-// and returning detailed errors for invalid ones within the batch.
+// Starting the Test Suite for API 1: Car Value Endpoint
 describe('API 1: Car Value Endpoint (Integration Tests - /api/car-value)', () => {
-    
-    // --- Positive Test Cases (Single Car Request) ---
-    // These tests verify that the API returns correct car values for valid inputs.
+
+    /**
+     * Helper function to calculate the expected car value based on the new logic.
+     * This function should mirror the calculation logic in your actual car valuation service.
+     * @param {string} model - The car model name.
+     * @param {number} year - The car year.
+     * @returns {number} The calculated car value.
+     */
+    const calculateExpectedCarValue = (model, year) => {
+        // Calculate modelFactor by summing the alphabetical position of each letter.
+        // Non-alphabetic characters are ignored. Case-insensitive.
+        const modelFactor = model.toLowerCase().split('').reduce((sum, char) => {
+            if (char >= 'a' && char <= 'z') {
+                return sum + (char.charCodeAt(0) - 'a'.charCodeAt(0) + 1); // 'a' is 1, 'b' is 2, etc.
+            }
+            return sum; // If it's not a letter (like '!' or numbers), add nothing to the sum.
+        }, 0); // Start counting from zero.
+
+        // Apply the new calculation logic: (modelFactor * 100) + year
+        let carValue = (modelFactor * 100) + year;
+
+        // Ensure the car value is never negative
+        return Math.max(0, carValue);
+    };
+
+    // --- Positive / Sunny Day Scenarios (Single Car Request) ---
+
+    // Test 1: Standard valid input (Civic, 2014)
     test('should return 200 and car value for valid Civic request', async () => {
+        const model = 'Civic';
+        const year = 2014;
+        const expectedCarValue = calculateExpectedCarValue(model, year); // Calculate expected value
+
         const res = await request(app)
             .post('/api/car-value')
-            .send({ model: "Civic", year: 2014 }); // Send request body
-        expect(res.statusCode).toBe(200); // Expect HTTP 200 OK
-        expect(res.body.carValue).toBe(6614); // Assert the calculated car value
-=======
-
-describe('API 1: Car Value Endpoint (Integration Tests - /api/car-value)', () => {
-    // --- Positive Test Cases ---
-    test('should return 200 and car value for valid Civic request', async () => {
-        const res = await request(app)
-            .post('/api/car-value')
-            .send({ model: "Civic", year: 2014 });
-        expect(res.statusCode).toBe(200);
-        expect(res.body.carValue).toBe(6614);
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
+            .send({ model, year });
+        
+        expect(res.statusCode).toEqual(200); // Expect a successful response (200 OK)
+        expect(res.body.carValue).toBe(expectedCarValue); // Expect the calculated car value to match
     });
 
+    // Test 2: Valid input, different model and year (Porsche, 2023)
     test('should return 200 and car value for valid Porsche request', async () => {
+        const model = 'Porsche';
+        const year = 2023;
+        const expectedCarValue = calculateExpectedCarValue(model, year);
+
         const res = await request(app)
             .post('/api/car-value')
-            .send({ model: "Porsche", year: 2023 });
-        expect(res.statusCode).toBe(200);
-        expect(res.body.carValue).toBe(10423);
+            .send({ model, year });
+        
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.carValue).toBe(expectedCarValue);
     });
 
-<<<<<<< HEAD
-    
-    // --- Edge Cases (Single Car Request) ---
-    // These tests cover specific scenarios for model and year inputs.
-=======
-    // Edge Cases (Migrated from previous unit tests, now as integration tests)
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
+    // Test 3: Model is a single letter (A, 2000)
     test('should return 200 and car value for model with a single letter (A)', async () => {
+        const model = 'A';
+        const year = 2000;
+        const expectedCarValue = calculateExpectedCarValue(model, year);
+
         const res = await request(app)
             .post('/api/car-value')
-            .send({ model: "A", year: 2000 });
-        expect(res.statusCode).toBe(200);
-        expect(res.body.carValue).toBe(2100);
+            .send({ model, year });
+        
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.carValue).toBe(expectedCarValue);
     });
 
+    // Test 4: Model with mixed casing (cIvIc, 2014)
     test('should return 200 and car value for model with mixed casing (cIvIc)', async () => {
+        const model = 'cIvIc';
+        const year = 2014;
+        const expectedCarValue = calculateExpectedCarValue(model, year); // Model factor is case-insensitive
+
         const res = await request(app)
             .post('/api/car-value')
-            .send({ model: "cIvIc", year: 2014 });
-        expect(res.statusCode).toBe(200);
-<<<<<<< HEAD
-        expect(res.body.carValue).toBe(6614); // Should treat "cIvIc" same as "CIVIC"
-=======
-        expect(res.body.carValue).toBe(6614);
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
+            .send({ model, year });
+        
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.carValue).toBe(expectedCarValue);
     });
 
+    // Test 5: Model with special characters (C!v!c, 2020)
     test('should return 200 and car value for model with special characters (C!v!c)', async () => {
+        const model = 'C!v!c';
+        const year = 2020;
+        const expectedCarValue = calculateExpectedCarValue(model, year); // Only alphabetic chars count
+
         const res = await request(app)
             .post('/api/car-value')
-            .send({ model: "C!v!c", year: 2020 });
-        expect(res.statusCode).toBe(200);
-<<<<<<< HEAD
-        // C=3, i (ignored), v=22, ! (ignored), c=3 => (3+22+3) * 100 + 2020 = 2800 + 2020 = 4820
-        expect(res.body.carValue).toBe(4820); 
+            .send({ model, year });
+        
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.carValue).toBe(expectedCarValue);
     });
 
-    // added from initial setting
+    // Test 6: Model containing only non-alphabetic characters (e.g., "123!@#$", 2020)
     test('should return 200 for a model containing only special characters and no letters', async () => {
+        const model = '123!@#$';
+        const year = 2020;
+        const expectedCarValue = calculateExpectedCarValue(model, year); // Model factor will be 0
+
         const res = await request(app)
             .post('/api/car-value')
-            .send({ model: "!@#$%", year: 2020 });
-        expect(res.statusCode).toBe(200);
-        expect(res.body.carValue).toBe(2020); // Alphabet sum is 0, so carValue is just the year
+            .send({ model, year });
+        
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.carValue).toBe(expectedCarValue);
     });
 
-    
-    // --- Negative Test Cases (Single Car Request) ---
-    // These tests verify that the API correctly handles invalid or missing inputs and returns 400 errors.
+    // --- Negative / Error Scenarios (Single Car Request) ---
+    // These tests verify that the API correctly handles invalid inputs and returns appropriate error codes.
 
-=======
-        expect(res.body.carValue).toBe(4820); // C=3, V=22, C=3 => 28 * 100 + 2020 = 4820
-    });
-
-
-    // --- Negative Test Cases (Endpoint) ---
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
+    // Test 7: Missing 'model' parameter in the request body
     test('should return 400 for missing model in request body', async () => {
         const res = await request(app)
             .post('/api/car-value')
             .send({ year: 2020 });
-        expect(res.statusCode).toBe(400);
-        expect(res.body.error).toBe("Missing 'model' parameter.");
-<<<<<<< HEAD
-        expect(res.body.errorCode).toBe('E_MISSING_MODEL'); // Assert specific error code
-=======
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
+        expect(res.statusCode).toEqual(400); // Expect a bad request status (400)
+        expect(res.body.error).toEqual("Missing 'model' parameter.");
+        expect(res.body.errorCode).toEqual("E_MISSING_MODEL");
     });
 
+    // Test 8: Empty 'model' string in the request body
     test('should return 400 for empty model string', async () => {
         const res = await request(app)
             .post('/api/car-value')
-            .send({ model: "", year: 2020 });
-        expect(res.statusCode).toBe(400);
-        expect(res.body.error).toBe("Model cannot be empty.");
-<<<<<<< HEAD
-        expect(res.body.errorCode).toBe('E_EMPTY_MODEL');
-=======
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
+            .send({ model: '', year: 2020 });
+        expect(res.statusCode).toEqual(400);
+        expect(res.body.error).toEqual("Model cannot be empty.");
+        expect(res.body.errorCode).toEqual("E_EMPTY_MODEL");
     });
 
+    // Test 9: 'model' parameter is a number (invalid type, should be string)
     test('should return 400 for model name as a number', async () => {
         const res = await request(app)
             .post('/api/car-value')
             .send({ model: 123, year: 2020 });
-        expect(res.statusCode).toBe(400);
-        expect(res.body.error).toBe("'model' must be a string.");
-<<<<<<< HEAD
-        expect(res.body.errorCode).toBe('E_INVALID_MODEL_TYPE');
-=======
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
+        expect(res.statusCode).toEqual(400);
+        expect(res.body.error).toEqual("'model' must be a string.");
+        expect(res.body.errorCode).toEqual("E_INVALID_MODEL_TYPE");
     });
 
+    // Test 10: Missing 'year' parameter
     test('should return 400 for missing year in request body', async () => {
         const res = await request(app)
             .post('/api/car-value')
-            .send({ model: "Civic" });
-        expect(res.statusCode).toBe(400);
-        expect(res.body.error).toBe("Missing 'year' parameter.");
-<<<<<<< HEAD
-        expect(res.body.errorCode).toBe('E_MISSING_YEAR');
-=======
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
+            .send({ model: 'Civic' });
+        expect(res.statusCode).toEqual(400);
+        expect(res.body.error).toEqual("Missing 'year' parameter.");
+        expect(res.body.errorCode).toEqual("E_MISSING_YEAR");
     });
 
+    // Test 11: 'year' parameter is a non-numeric string (invalid format)
     test('should return 400 for invalid year format (non-numeric string)', async () => {
         const res = await request(app)
             .post('/api/car-value')
-            .send({ model: "Civic", year: "two thousand" });
-        expect(res.statusCode).toBe(400);
-<<<<<<< HEAD
-        //corrected
-        expect(res.body.error).toBe('Year must be a positive integer. Invalid format.');
-        expect(res.body.errorCode).toBe('E_INVALID_YEAR_FORMAT');
+            .send({ model: 'Civic', year: 'invalid year' });
+        expect(res.statusCode).toEqual(400);
+        expect(res.body.error).toEqual("Invalid year format. Year must be an integer.");
+        expect(res.body.errorCode).toEqual("E_INVALID_YEAR_FORMAT");
     });
 
-    //added from initail setting
+    // Test 12: 'year' parameter is a decimal number (invalid format)
     test('should return 400 for a non-integer "year" (decimal)', async () => {
-=======
-        expect(res.body.error).toBe('Invalid year format. Year must be an integer.');
-    });
-
-    test('should return 400 for non-integer year', async () => {
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
         const res = await request(app)
             .post('/api/car-value')
-            .send({ model: "Civic", year: 2020.5 });
-        expect(res.statusCode).toBe(400);
-<<<<<<< HEAD
-        expect(res.body.error).toBe("Invalid 'year' parameter. 'year' must be an integer (no decimals).");
-        expect(res.body.errorCode).toBe('E_INVALID_YEAR_VALUE');
-=======
-        expect(res.body.error).toBe("Missing or invalid 'year' parameter. Year must be a positive integer.");
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
+            .send({ model: 'Civic', year: 2020.5 });
+        expect(res.statusCode).toEqual(400);
+        expect(res.body.error).toEqual("Invalid year format. Year must be an integer.");
+        expect(res.body.errorCode).toEqual("E_INVALID_YEAR_FORMAT");
     });
 
+    // Test 13: 'year' parameter is a negative number
     test('should return 400 for negative year', async () => {
         const res = await request(app)
             .post('/api/car-value')
-            .send({ model: "Civic", year: -100 });
-        expect(res.statusCode).toBe(400);
-<<<<<<< HEAD
-        expect(res.body.error).toBe("Invalid 'year' parameter. 'year' must be a positive integer (greater than 0).");
-        expect(res.body.errorCode).toBe('E_INVALID_YEAR_VALUE');
+            .send({ model: 'Civic', year: -100 });
+        expect(res.statusCode).toEqual(400);
+        expect(res.body.error).toEqual("Missing or invalid 'year' parameter. Year must be a positive integer.");
+        expect(res.body.errorCode).toEqual("E_INVALID_YEAR_VALUE");
     });
 
-    test('should return 400 for a null "year"', async () => {
-=======
-        expect(res.body.error).toBe("Missing or invalid 'year' parameter. Year must be a positive integer.");
-    });
-
-    test('should return 400 for null year', async () => {
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
-        const res = await request(app)
-            .post('/api/car-value')
-            .send({ model: "Civic", year: null });
-        expect(res.statusCode).toBe(400);
-<<<<<<< HEAD
-        expect(res.body.error).toBe("Invalid 'year' parameter. 'year' cannot be null.");
-        expect(res.body.errorCode).toBe('E_INVALID_YEAR_VALUE');
-=======
-        // Corrected expectation to match server.js behavior for null year
-        expect(res.body.error).toBe("Missing or invalid 'year' parameter. Year must be a positive integer.");
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
-    });
-
-    test('should return 400 for empty request body', async () => {
-        const res = await request(app)
-            .post('/api/car-value')
-            .send({});
-        expect(res.statusCode).toBe(400);
-        // Corrected expectation to match server.js behavior for empty body
-        expect(res.body.error).toBe("Missing 'model' parameter.");
-<<<<<<< HEAD
-        expect(res.body.errorCode).toBe('E_MISSING_MODEL');
-    });
-
-    // --- Negative Test Cases (Single Car Request) ---
-    // These tests verify that the API correctly handles invalid or missing inputs and returns 400 errors.
-
-    test('should return 400 for a missing "model" parameter in request body', async () => {
-        const res = await request(app)
-            .post('/api/car-value')
-            .send({ year: 2020 });
-        expect(res.statusCode).toBe(400);
-        expect(res.body.error).toBe("Missing 'model' parameter.");
-        expect(res.body.errorCode).toBe('E_MISSING_MODEL'); // Assert specific error code
-    });
-
-    test('should return 400 for an empty "model" string', async () => {
-        const res = await request(app)
-            .post('/api/car-value')
-            .send({ model: "", year: 2020 });
-        expect(res.statusCode).toBe(400);
-        expect(res.body.error).toBe("Model cannot be empty.");
-        expect(res.body.errorCode).toBe('E_EMPTY_MODEL');
-    });
-
-    test('should return 400 for "model" name as a number', async () => {
-        const res = await request(app)
-            .post('/api/car-value')
-            .send({ model: 123, year: 2020 });
-        expect(res.statusCode).toBe(400);
-        expect(res.body.error).toBe("'model' must be a string.");
-        expect(res.body.errorCode).toBe('E_INVALID_MODEL_TYPE');
-    });
-
-    test('should return 400 for a missing "year" parameter in request body', async () => {
-        const res = await request(app)
-            .post('/api/car-value')
-            .send({ model: "Civic" });
-        expect(res.statusCode).toBe(400);
-        expect(res.body.error).toBe("Missing 'year' parameter.");
-        expect(res.body.errorCode).toBe('E_MISSING_YEAR');
-    });
-
-    test('should return 400 for invalid "year" format (non-numeric string)', async () => {
-        const res = await request(app)
-            .post('/api/car-value')
-            .send({ model: "Civic", year: "two thousand" });
-        expect(res.statusCode).toBe(400);
-        expect(res.body.error).toBe('Year must be a positive integer. Invalid format.');
-        expect(res.body.errorCode).toBe('E_INVALID_YEAR_FORMAT');
-    });
-
-    test('should return 400 for a non-integer "year" (decimal)', async () => {
-        const res = await request(app)
-            .post('/api/car-value')
-            .send({ model: "Civic", year: 2020.5 });
-        expect(res.statusCode).toBe(400);
-        expect(res.body.error).toBe("Invalid 'year' parameter. 'year' must be an integer (no decimals).");
-        expect(res.body.errorCode).toBe('E_INVALID_YEAR_VALUE');
-    });
-
-    test('should return 400 for a negative "year"', async () => {
-        const res = await request(app)
-            .post('/api/car-value')
-            .send({ model: "Civic", year: -100 });
-        expect(res.statusCode).toBe(400);
-        expect(res.body.error).toBe("Invalid 'year' parameter. 'year' must be a positive integer (greater than 0).");
-        expect(res.body.errorCode).toBe('E_INVALID_YEAR_VALUE');
-    });
-
+    // Test 14: 'year' parameter is null
     test('should return 400 for a null "year"', async () => {
         const res = await request(app)
             .post('/api/car-value')
-            .send({ model: "Civic", year: null });
-        expect(res.statusCode).toBe(400);
-        expect(res.body.error).toBe("Invalid 'year' parameter. 'year' cannot be null.");
-        expect(res.body.errorCode).toBe('E_INVALID_YEAR_VALUE');
+            .send({ model: 'Civic', year: null });
+        expect(res.statusCode).toEqual(400);
+        expect(res.body.error).toEqual("Missing 'year' parameter.");
+        expect(res.body.errorCode).toEqual("E_MISSING_YEAR");
     });
 
-    test('should return 400 for an empty request body', async () => {
+    // Test 15: Empty request body
+    test('should return 400 for an empty request body (treated as missing model)', async () => {
         const res = await request(app)
             .post('/api/car-value')
             .send({});
-        expect(res.statusCode).toBe(400);
-        expect(res.body.error).toBe("Missing 'model' parameter.");
-        expect(res.body.errorCode).toBe('E_MISSING_MODEL');
+        expect(res.statusCode).toEqual(400);
+        expect(res.body.error).toEqual("Missing 'model' parameter.");
+        expect(res.body.errorCode).toEqual("E_MISSING_MODEL");
     });
 
-    // --- Batch Request Test Cases (Array Input) ---
-    // These tests verify the API's behavior when an array of car objects is sent.
-
-    test('should return 400 and detailed results for mixed valid/invalid array input', async () => {
+    // Test 16: Request body is not an object (e.g., string)
+    test('should return 400 for a non-object single request body (e.g., string)', async () => {
         const res = await request(app)
             .post('/api/car-value')
-            .send([
-                { model: "Civic", year: 2010 },      // Valid item
-                { model: "Porsche", year: "oops" },  // Invalid year format
-                { model: "Accord", year: 2020 }      // Valid item
-            ]);
+            .send('not an object'); // Send a string instead of an object
+        expect(res.statusCode).toEqual(400);
+        expect(res.body.error).toEqual("Input must be a JSON object for a single car request.");
+        expect(res.body.errorCode).toEqual("E_INVALID_SINGLE_INPUT_TYPE");
+    });
 
-        expect(res.statusCode).toBe(400); // Overall status is 400 because at least one item failed
-        expect(res.body.length).toBe(3); // Ensure all three items are in the response
+    // --- Batch / Array Input Scenarios ---
 
-        // Assertions for the first (valid) item
-        expect(res.body[0].model).toBe("Civic");
-        expect(res.body[0].carValue).toBe(6610);
-        expect(res.body[0].error).toBeUndefined(); // No error for this item
+    // Test 17: Array input with all valid cars
+    test('should return 200 and all results for an array input with all valid cars', async () => {
+        const requests = [
+            { model: 'Civic', year: 2010 },
+            { model: 'Accord', year: 2020 }
+        ];
+        const res = await request(app)
+            .post('/api/car-value')
+            .send(requests);
+        
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toHaveLength(2);
+
+        // Assertions for the first car (Civic)
+        expect(res.body[0].carValue).toBe(calculateExpectedCarValue('Civic', 2010));
+        expect(res.body[0].model).toBe('Civic');
+        expect(res.body[0].year).toBe(2010);
+        expect(res.body[0].error).toBeUndefined();
         expect(res.body[0].errorCode).toBeUndefined();
 
-        // Assertions for the second (invalid) item
-        expect(res.body[1].model).toBe("Porsche");
-        expect(res.body[1].carValue).toBeUndefined(); // No carValue for failed item
-        // you were expecting an errorCode of 'E_INVALID_YEAR_FORMAT' for the second item in the batch (res.body[1]),
-        // but the response didn't have an errorCode property at all (undefined).
-        expect(res.body[1].error).toBe("Year must be a positive integer. Invalid format.");
-        expect(res.body[1].errorCode).toBe('E_INVALID_YEAR_FORMAT'); // Assert specific error code
-
-        // Assertions for the third (valid) item
-        expect(res.body[2].model).toBe("Accord");
-        // This correction aligns the test's expectation with the actual and correct calculation for "Accord"
-        // (Alphabet Sum 44 * 100 + 2020 Year = 6420).
-        expect(res.body[2].carValue).toBe(6420);
-        expect(res.body[2].error).toBeUndefined();
-        expect(res.body[2].errorCode).toBeUndefined();
+        // Assertions for the second car (Accord)
+        expect(res.body[1].carValue).toBe(calculateExpectedCarValue('Accord', 2020));
+        expect(res.body[1].model).toBe('Accord');
+        expect(res.body[1].year).toBe(2020);
+        expect(res.body[1].error).toBeUndefined();
+        expect(res.body[1].errorCode).toBeUndefined();
     });
 
-    test('should return 200 and all results for an array input with all valid cars', async () => {
+    // Test 18: Array input with mixed valid/invalid data
+    test('should return 400 and detailed results for mixed valid/invalid array input', async () => {
+        const requests = [
+            { model: 'Civic', year: 2020 },       // Valid input
+            { model: 'Camry', year: 'invalid' },  // Invalid year format
+            { model: 'Accord', year: 2020 },      // Valid input
+            { model: '', year: 2021 },            // Empty model string
+            null                                  // Invalid batch item type (should be an object)
+        ];
         const res = await request(app)
             .post('/api/car-value')
-            .send([
-                { model: "Civic", year: 2010 },
-                { model: "Accord", year: 2020 }
-            ]);
+            .send(requests);
+        
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveLength(5);
 
-        expect(res.statusCode).toBe(200); // Overall status is 200 as all items are valid
-        expect(res.body.length).toBe(2);
+        // Result 1: Valid Civic
+        expect(res.body[0]).toEqual({ 
+            model: 'Civic', 
+            year: 2020, 
+            carValue: calculateExpectedCarValue('Civic', 2020) 
+        });
 
-        // Assertions for the first item
-        expect(res.body[0].model).toBe("Civic");
-        expect(res.body[0].carValue).toBe(6610);
+        // Result 2: Invalid year format for Camry
+        expect(res.body[1]).toEqual({
+            model: 'Camry',
+            year: 'invalid',
+            error: "Invalid year format. Year must be an integer.",
+            errorCode: "E_INVALID_YEAR_FORMAT"
+        });
 
-        // Assertions for the second item
-        expect(res.body[1].model).toBe("Accord");
-        expect(res.body[1].carValue).toBe(6420);
+        // Result 3: Valid Accord
+        expect(res.body[2]).toEqual({ 
+            model: 'Accord', 
+            year: 2020, 
+            carValue: calculateExpectedCarValue('Accord', 2020) 
+        });
+
+        // Result 4: Empty model for empty string input - UPDATED EXPECTATION
+        expect(res.body[3]).toEqual({
+            model: '',
+            year: 2021, // <-- Added this line to match API response
+            error: "Model cannot be empty.",
+            errorCode: "E_EMPTY_MODEL"
+        });
+
+        // Result 5: Invalid batch item type for null input
+        expect(res.body[4]).toEqual({
+            error: "Each item in the batch must be a JSON object.",
+            errorCode: "E_INVALID_BATCH_ITEM_TYPE"
+        });
     });
 
-=======
-    });
-
-    test('should return 200 for model containing only special characters and no letters', async () => { // Changed description to reflect expected 200
+    // Test case: Empty array input
+    test('should return 200 and an empty array for an empty array input', async () => {
         const res = await request(app)
             .post('/api/car-value')
-            .send({ model: "!@#$%", year: 2020 });
-        // Corrected status code and expected body to match server.js behavior
-        expect(res.statusCode).toBe(200);
-        expect(res.body.carValue).toBe(2020); // Alphabet sum is 0, so carValue is just the year
+            .send([]);
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toEqual([]);
     });
->>>>>>> 56af15fba2f93b6010f5f450febc32f17b86b410
+
 });
