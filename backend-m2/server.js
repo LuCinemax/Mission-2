@@ -55,7 +55,7 @@ app.use(cors());
 // 'app.use(express.json());' teaches our website to understand messages that are written in "JSON" language.
 // JSON is a popular way computers talk to each other, like sending a note that says { "model": "Civic", "year": 2014 }.
 app.use(express.json());
- 
+
 // --- Setting Up Website "Doors" (API Endpoints - where people can send messages) ---
  
 // This is a special door for calculating car values.
@@ -82,9 +82,40 @@ app.get('/api/test-car-batch-mixed', (req, res) => {
 });
    
 //-------------------------End of Takashi section----------------------------------------------------------------------
+
+const keywords = ["Crash", "Scratch", "Collide", "Bump", "Smash"];
+const maxKeywords = 5
+const noKeywords = 0
 // Wisony — API 2: Risk Rating
-app.get('/api/ping', (req, res) => {
-  res.status(200).json({ message: 'pong' });
+app.post("/api/risk-rating", (req, res) => {
+  //Getting the claim_history from user input
+  const { claim_history } = req.body;
+
+  if (typeof claim_history !== "string" || claim_history.trim() === "") {
+    return res.status(400).json({ error: "Invalid input entered" });
+  }
+  
+  const lowerCaseText = claim_history.toLowerCase();
+  
+  let keywordCount = 0;
+  //Loops through keywords array for every keyword match in the claim history
+  for (const word of keywords) {
+    //creates a global(matches all occurrences) and case insensitive regular expression for the keywords
+    const regex = new RegExp(word, "gi");
+    //matches all the keywords in the claim history
+    const keywordMatches = lowerCaseText.match(regex);
+    //counts all the keywords in the claim history and adds to the count
+    //if no keywords are found count will stay at 0
+    keywordCount += keywordMatches ? keywordMatches.length : 0;
+  }
+  //If there are more then 5 keywords in claim history it will return an error
+  if (keywordCount > maxKeywords) {
+    return res.status(400).json({ error: "To many risky events" });
+  }
+  if (keywordCount === noKeywords){
+    return res.status(400).json({ error: "No risky events"})
+  }
+  return res.status(200).json({ risk_rating: keywordCount });
 });
  
 // Kerry — API 3: Quote Calculation
