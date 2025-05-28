@@ -84,6 +84,7 @@ app.post("/api/car-value", (req, res) => {
 
 const keywords = ["Crash", "Scratch", "Collide", "Bump", "Smash"];
 const maxKeywords = 5
+const noKeywords = 0
 // Wisony — API 2: Risk Rating
 app.post("/api/risk-rating", (req, res) => {
   //Getting the claim_history from user input
@@ -109,6 +110,9 @@ app.post("/api/risk-rating", (req, res) => {
   //If there are more then 5 keywords in claim history it will return an error
   if (keywordCount > maxKeywords) {
     return res.status(400).json({ error: "To many risky events" });
+  }
+  if (keywordCount === noKeywords){
+    return res.status(400).json({ error: "No risky events"})
   }
   return res.status(200).json({ risk_rating: keywordCount });
 });

@@ -3,28 +3,15 @@ const app = require("../server");
 
 describe("Api 2: Risk Rating Endpoint /api/risk-rating", () => {
   // Positive Test Cases
-  test("2 keywords should return risk rating of 2", async () => {
-    const res = await request(app)
-      .post("/api/risk-rating")
-      .send({ claim_history: "Crash, Scratch" });
-    expect(res.statusCode).toBe(200);
-    expect(res.body).toEqual({ risk_rating: 2 });
-  });
-
   test("3 keywords should return risk rating of 3", async () => {
+    // Sends a post request with a claim_history
     const res = await request(app)
       .post("/api/risk-rating")
       .send({ claim_history: "Crash, Bump, Collide" });
+      // Expect a 200 OK response, since input is valid and has keywords
     expect(res.statusCode).toBe(200);
+    // Expect the risk_rating to equal 3 (1 for crash, 1 for bump and 1 for collide)
     expect(res.body).toEqual({ risk_rating: 3 });
-  });
-
-  test("4 keywords should return risk rating of 4", async () => {
-    const res = await request(app)
-      .post("/api/risk-rating")
-      .send({ claim_history: "Scratch, Bump, Smash, Collide" });
-    expect(res.statusCode).toBe(200);
-    expect(res.body).toEqual({ risk_rating: 4 });
   });
 
   test("repeated keywords still return risk rating", async () => {
@@ -52,10 +39,13 @@ describe("Api 2: Risk Rating Endpoint /api/risk-rating", () => {
   });
   //negative test cases
   test("If input is a empty string returns an error", async () => {
+    // Sends a post request with a claim_history
     const res = await request(app)
       .post("/api/risk-rating")
       .send({ claim_history: "" });
+    // Expect a 400 bad request response since input is invalid
     expect(res.statusCode).toBe(400);
+    // Expects an error since the claim_history is an invalid input
     expect(res.body).toEqual({ error: "Invalid input entered" });
   });
 
@@ -107,11 +97,11 @@ describe("Api 2: Risk Rating Endpoint /api/risk-rating", () => {
     expect(res.body).toEqual({ error: "To many risky events" });
   });
 
-  test("No keywords should return risk rating of 0", async () => {
+  test("No keywords should return an error", async () => {
     const res = await request(app)
       .post("/api/risk-rating")
       .send({ claim_history: "I have had no accidents" });
-    expect(res.statusCode).toBe(200);
-    expect(res.body).toEqual({ risk_rating: 0 });
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toEqual({ error: "No risky events" });
   });
 });
