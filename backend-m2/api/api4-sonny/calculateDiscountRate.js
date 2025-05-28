@@ -10,6 +10,7 @@ const calculateDiscountRate = (age, yearsOfExperience) => {
   const NO_DISCOUNT = 0;
   let discountRate = 0; // Start with no discount
 
+  // CONDITIONALS FOR BUSINESS LOGIC
   if (age < MINIMUM_AGE_FOR_DISCOUNT && yearsOfExperience > MINIMUM_YEARS_OF_EXPERIENCE) {
     return NO_DISCOUNT; 
   }

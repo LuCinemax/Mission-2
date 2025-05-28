@@ -8,7 +8,7 @@ import finance from "../assets/Images/finance.jpg";
 import userIcon from "../assets/Images/user.png";
 import phoneIcon from "../assets/Images/phone.png";
 import locationIcon from "../assets/Images/location.png";
-
+import AgeExperienceForm from '../components/AgeExperienceForm';
 
 // ====================================================================
 // START OF HELPER COMPONENTS DEFINITIONS
@@ -292,7 +292,7 @@ const API = () => {
   const [quote, setQuote] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:4888/api/quote", {
+    fetch("http://localhost:3000/api/quote", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -563,14 +563,7 @@ const API = () => {
 
             {/* Placeholder for API 4 */}
             <div className={styles.api4}>
-              <form>
-                <label htmlFor="api4Input">AGE:   </label>
-                <input type="text" id="api4Input" name="api4Input" placeholder="Enter your age here..." />
-                <label htmlFor="api4Output">EXPERIENCE:   </label>
-                <input type="text" id="api4Output" name="api4Output" placeholder="Enter your driving experience here..." readOnly />
-                <br></br>
-                <button type="submit">Submit</button>
-              </form>
+              <AgeExperienceForm />
             </div>
           </section>
          {/* ========######## FOOTER ########======== */}
