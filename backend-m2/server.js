@@ -87,30 +87,29 @@ const keywords = ["Crash", "Scratch", "Collide", "Bump", "Smash"];
 app.post("/api/risk-rating", (req, res) => {
   //Getting the claim_history from user input
   const { claim_history } = req.body;
-  //Checks if claim history is not a string and returns an error if it is
-  //Checks if claim_history is an empty string and returns an error if it is
+
   if (typeof claim_history !== "string" || claim_history.trim() === "") {
     return res.status(400).json({ error: "Invalid input entered" });
   }
-  //Turning the claim_history from user input into lower case
+  
   const lowerCaseText = claim_history.toLowerCase();
-  //counts how many keywords are said in the claim_history
-  let count = 0;
+  
+  let keywordCount = 0;
   //Loops through keywords array for every keyword match in the claim history
   for (const word of keywords) {
     //creates a global(matches all occurrences) and case insensitive regular expression for the keywords
     const regex = new RegExp(word, "gi");
     //matches all the keywords in the claim history
-    const matches = lowerCaseText.match(regex);
+    const keywordMatches = lowerCaseText.match(regex);
     //counts all the keywords in the claim history and adds to the count
     //if no keywords are found count will stay at 0
-    count += matches ? matches.length : 0;
+    keywordCount += keywordMatches ? keywordMatches.length : 0;
   }
   //If there are more then 5 keywords in claim history it will return an error
-  if (count > 5) {
+  if (keywordCount > 5) {
     return res.status(400).json({ error: "To many risky events" });
   }
-  return res.status(200).json({ risk_rating: count });
+  return res.status(200).json({ risk_rating: keywordCount });
 });
 
 // Kerry — API 3: Quote Calculation
