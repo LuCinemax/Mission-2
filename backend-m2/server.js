@@ -1,3 +1,21 @@
+// C:\Level 5\Mission2\Mission-2_backup\backend-m2\server.js
+
+// This file is like the main control center for your entire car value website (API)!
+
+// 1. Getting Our Tools Ready (Like gathering ingredients for a recipe)
+
+// 'express' is a super popular tool that helps us build web applications easily.
+// Think of it as a special building kit for websites.
+const express = require('express');
+// 'cors' is a helpful guard. It decides who is allowed to talk to your website from other places on the internet.
+// It's like setting up a gate to let friendly visitors in.
+const cors = require('cors');
+// 'dotenv' is like a secret keeper. It helps us load special secret codes (like the port number)
+// from a hidden '.env' file, so they don't get accidentally shared.
+require('dotenv').config();
+
+const calculatePremium = require("./api/api3-kerry/quoteCalculator");
+
 const {
   APIError,
   calculateCarValue,
@@ -5,94 +23,82 @@ const {
 const {
   calculateDiscountRate,
 } = require("./api/api4-sonny/calculateDiscountRate.js");
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
 
+// We bring in the 'carValueController'. This is like a special manager
+// for your car value calculations. It knows what to do when someone asks for a car value.
+// API 1 for Takashi endpoint component from api1-takashi/controllers/carValueController'
+const carValueController = require('./api/api1-takashi/controllers/carValueController');
+
+// 2. Setting Up Our Website (Starting to build with our tools)
+
+// We create our main website application using 'express'.
+// This 'app' variable is now our website's brain!
 const app = express();
-const PORT = process.env.PORT;
 
+// --- Loading "Fake" Car Data for Testing (Like having toy cars to play with) ---
+// These files are like small lists of pretend car information.
+// We load them directly here because we'll just show them when someone asks for them.
+const carDataSingle = require('./jsondata/car_data_single_takashi.json');
+const carDataTakashi = require('./jsondata/car_data_takashi.json');
+const carDataTestTakashi = require('./jsondata/car_data_test_takashi.json');
+
+// This is like choosing which door number (port) your website will use on the internet.
+// It tries to use the number from the secret file (`process.env.PORT`), or it uses 3000 if there's no secret number.
+const PORT = process.env.PORT || 3000;
+
+// --- Adding Special Rules for Our Website (Setting up how it works) ---
+
+// 'app.use(cors());' tells our website's guard ('cors') to let everyone visit.
+// This is important so other websites can talk to your car value calculator.
 app.use(cors());
+// 'app.use(express.json());' teaches our website to understand messages that are written in "JSON" language.
+// JSON is a popular way computers talk to each other, like sending a note that says { "model": "Civic", "year": 2014 }.
 app.use(express.json());
 
-// === API Routes by Assigned Developer ===
+// --- Setting Up Website "Doors" (API Endpoints - where people can send messages) ---
 
-// Takashi — API 1: Car Value
-app.post("/api/car-value", (req, res) => {
-  const requestBody = req.body; // We get all the data someone sent us.
+// This is a special door for calculating car values.
+// When someone sends a POST message (like "Hey, calculate this!") to '/api/car-value',
+// our 'carValueController' manager takes over and handles the request.
+app.post('/api/car-value', carValueController.handleCarValueRequest);
 
-  // Let's check if they sent us a list of cars (an array) or just one car.
-  // If it's NOT a list, we treat it like one car, just like before.
-  if (!Array.isArray(requestBody)) {
-    // We expect the car's name (model) and year.
-    const { model, year } = requestBody;
+// --- Extra Doors for Showing Test Data (Like having a display of your toy cars) ---
+// These are simple doors where you can just look at some pre-made car data.
 
-    try {
-      // We ask our brain to calculate the car value for this one car.
-      const carValue = calculateCarValue({ model, year });
-      return res.json({ carValue }); // We send back the calculated value.
-    } catch (error) {
-      // Uh-oh! Something went wrong.
-      if (error instanceof APIError) {
-        // If it's our special "uh-oh" message, we send that back with a "bad request" number (400).
-        return res.status(error.statusCode).json({ error: error.message });
-      } else {
-        // If it's a mystery error, we write it down for us to check later
-        // and send a general "something went wrong" message.
-        console.error("Internal Server Error:", error);
-        return res.status(500).json({ error: "An unexpected error occurred." });
-      }
-    }
-  }
-
-  // If the request body IS a list of cars (an array), we go through each one!
-  const results = []; // This list will hold the value for each car, or an error.
-  let hasErrors = false; // A flag to remember if any car had an error.
-
-  // We go through each car in the list, one by one.
-  for (const carData of requestBody) {
-    // We get the car's name (model) and year from this car's data.
-    const { model, year } = carData;
-    let processedItem = { ...carData }; // We make a copy of the car's original details.
-
-    try {
-      // We ask our brain to calculate the car value for this car.
-      const carValue = calculateCarValue({ model, year });
-      processedItem.carValue = carValue; // We add the calculated value to our car's details.
-    } catch (error) {
-      hasErrors = true; // Oh no, an error happened for this car!
-      if (error instanceof APIError) {
-        processedItem.error = error.message; // We add our special "uh-oh" message for this car.
-      } else {
-        // If it's a mystery error, we write it down for us to check later
-        // and add a general "something went wrong" message for this car.
-        console.error("Internal Server Error for item:", carData, error);
-        processedItem.error = "An unexpected error occurred for this item.";
-      }
-    }
-    results.push(processedItem); // We add this car's details (with value or error) to our list of results.
-  }
-
-  // Now, we decide what kind of "answer" to send back.
-  if (hasErrors) {
-    // If even one car had an error, we send a "bad request" number (400)
-    // and the list showing which cars worked and which didn't.
-    return res.status(400).json(results);
-  } else {
-    // If all cars were calculated perfectly, we send a "success" number (200)
-    // and the list with all the car values.
-    return res.status(200).json(results);
-  }
+// This door (URL) shows you one example of car data.
+app.get('/api/test-car-single', (req, res) => {
+    res.json(carDataSingle); // Send the single car data as a JSON message.
 });
 
+// This door shows you a list of valid cars, good for testing many cars at once.
+app.get('/api/test-car-batch-valid', (req, res) => {
+    res.json(carDataTakashi); // Send the list of good cars.
+});
+
+// This door shows you a list of cars, some good and some with problems, for trickier tests.
+app.get('/api/test-car-batch-mixed', (req, res) => {
+    res.json(carDataTestTakashi); // Send the list of mixed cars.
+});
+   
+//-------------------------End of Takashi section----------------------------------------------------------------------
 // Wisony — API 2: Risk Rating
-app.post("/api/risk-rating", (req, res) => {
-  res.json({ message: "Wisony - Risk Rating API working" });
+app.get('/api/ping', (req, res) => {
+  res.status(200).json({ message: 'pong' });
 });
 
 // Kerry — API 3: Quote Calculation
-app.post("/api/quote", (req, res) => {
-  res.json({ message: "Kerry - Quote API working" });
+app.post('/api/quote', (req, res) => {
+  const { car_value, risk_rating } = req.body;
+//   const car_value = 6614;
+//   const risk_rating = 5;
+
+  const result = calculatePremium(car_value, risk_rating);
+
+  if (result.error) {
+    return res.status(400).json(result);
+  }
+
+  res.json(result);
 });
 
 // Sonny — API 4: Discount Rate
@@ -122,10 +128,18 @@ app.post("/test", (req, res) => {
   res.status(200).json({ discount: discount });
 });
 
+
+// 3. Opening Our Website for Business! (Making the website start running)
+// Start the server only if the environment is not 'test'
+// This prevents the server from starting during test runs (e.g., with Supertest)
+// This line tells our website to actually start listening for visitors on the chosen door number (PORT).
+// Once it starts, it will print a message to the console, so you know it's ready! 
 if (process.env.NODE_ENV !== "test") {
   app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
   });
 }
 
+
+// Export the Express app instance, primarily for testing frameworks like Supertest
 module.exports = app;
