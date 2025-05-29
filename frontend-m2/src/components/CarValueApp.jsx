@@ -42,7 +42,7 @@ function CarValueApp({ onCarValueChange }) {
       <form onSubmit={handleSubmit}>
         <div>
           <label>
-            Model:
+            Model: <br />
             <input
               type="text"
               value={model}
@@ -54,7 +54,7 @@ function CarValueApp({ onCarValueChange }) {
 
         <div>
           <label>
-            Year:
+            Year: <br />
             <input
               type="number"
               value={year}

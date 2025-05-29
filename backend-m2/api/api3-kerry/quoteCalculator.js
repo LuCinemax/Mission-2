@@ -1,11 +1,10 @@
-// === Constants for input validation ===
-const MIN_RISK_FACTOR = 1;
+// Constants for input validation 
+const MIN_RISK_FACTOR  = 1
 const MAX_RISK_FACTOR = 5;
 
-/**
- * Calculates insurance premiums based on car value and risk rating.
- * Returns either an error object or an object with monthly and yearly premiums.
- */
+// Calculates insurance premiums based on car value and risk rating. 
+// Returns either an error object or an object with monthly and yearly premiums.
+
 function calculatePremium(car_value, risk_rating) {
   // Check for missing inputs
   if (car_value === undefined || risk_rating === undefined) {
@@ -19,7 +18,8 @@ function calculatePremium(car_value, risk_rating) {
     };
   }
 
-  // === Validate input values ===
+  // ========Validate input values======== //
+
   // Check if car_value is a valid number
   if (isNaN(car_value) ||
   // Check if risk_rating is a valid number

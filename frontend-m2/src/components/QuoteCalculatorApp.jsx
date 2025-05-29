@@ -13,7 +13,7 @@ function QuoteCalculatorApp({ carValue, riskRating }) {
     const parsedRiskRating = parseInt(riskRating, 10);
 
     if (isNaN(parsedCarValue) || isNaN(parsedRiskRating)) {
-      setError("Both car value and risk rating must be valid numbers.");
+      setError("Invalid Entry.");
       return;
     }
 
