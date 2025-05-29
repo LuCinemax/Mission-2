@@ -3,7 +3,6 @@ const app = require("../server");
 
 // ========VALID TEST CASES======== //
 describe("POST /api/quote", () => {
- 
   // Mid Range
   it("returns 200 and correct premiums for standard valid input values", async () => {
     const res = await request(app)
@@ -12,14 +11,14 @@ describe("POST /api/quote", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({
-      monthly_premium: 20.0,
-      yearly_premium: 240.0,
+      monthly_premium: "$20",
+      yearly_premium: "$240",
     });
   });
 
   // ========BOUNDARY CASES======== //
 
- // Low Range
+  // Low Range
   it("returns 200 and correct premiums for minimum valid input values", async () => {
     const res = await request(app)
       .post("/api/quote")
@@ -27,9 +26,9 @@ describe("POST /api/quote", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({
-      monthly_premium: 0.0,
-      yearly_premium: 0.01,
-    });
+  monthly_premium: "$0",
+  yearly_premium: "$0.01",
+});
   });
 
   // High Range
@@ -40,8 +39,8 @@ describe("POST /api/quote", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({
-      monthly_premium: 4166.67,
-      yearly_premium: 50000.0,
+      monthly_premium: "$4166.67",
+      yearly_premium: "$50000",
     });
   });
 
@@ -55,13 +54,13 @@ describe("POST /api/quote", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({
-      monthly_premium: 0.0,
-      yearly_premium: 0.0001,
+      monthly_premium: "$0",
+      yearly_premium: "$0.0001",
     });
   });
 
   // ========INVALID INPUT CASES======== //
-  
+
   // Fail on non integer ratings
   it("returns 400 when risk_rating is a decimal", async () => {
     const res = await request(app)
@@ -86,22 +85,21 @@ describe("POST /api/quote", () => {
 
   // Null Car Value
   it("returns 400 when car_value is null", async () => {
-  const res = await request(app)
-    .post("/api/quote")
-    .send({ car_value: null, risk_rating: 3 });
+    const res = await request(app)
+      .post("/api/quote")
+      .send({ car_value: null, risk_rating: 3 });
 
-  expect(res.statusCode).toBe(400);
-  expect(res.body).toHaveProperty("error");
-});
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty("error");
+  });
 
-// Null risk rating
-it("returns 400 when risk_rating is null", async () => {
-  const res = await request(app)
-    .post("/api/quote")
-    .send({ car_value: 5000, risk_rating: null });
+  // Null risk rating
+  it("returns 400 when risk_rating is null", async () => {
+    const res = await request(app)
+      .post("/api/quote")
+      .send({ car_value: 5000, risk_rating: null });
 
-  expect(res.statusCode).toBe(400);
-  expect(res.body).toHaveProperty("error");
-});
-
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty("error");
+  });
 });
