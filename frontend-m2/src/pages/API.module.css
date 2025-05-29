@@ -83,26 +83,42 @@ a {
 .apiContainer {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
 
 }
 
 .api1 {
-    width: 100%;
-    height: 50px;
-    background-color: aqua;
+    display: flex;
+    justify-content: center;
+    width: 66%;
+    height: 180px;
+    align-items: center;
+    background-color: grey;
 }
 .api2 {
-    width: 100%;
-    height: 50px;
-    background-color: red;
+    display: flex;
+    justify-content: center;
+    width: 66%;
+    align-items: center;
+    height: 150px;
+    background-color: lightgray;
 }
 .api3 {
-    width: 100%;
-    height: 50px;
-    background-color: green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 66%;
+    height: 100px;
+    background-color: grey;
 }
 .api4 {
-    width: 100%;
-    height: 50px;
-    background-color: yellow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 66%;
+    height: 180px;
+    margin-bottom: 10px;
+    background-color: lightgray;
 }

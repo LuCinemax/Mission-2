@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import styles from './AgeExperienceForm.module.css'
 
 function AgeExperienceForm() {
   // USESTATE VARIABLES
@@ -52,7 +53,7 @@ function AgeExperienceForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={styles.api4} onSubmit={handleSubmit}>
       <h3>Discount Rate Calculation</h3>
 
       <label htmlFor="age">AGE:</label>
