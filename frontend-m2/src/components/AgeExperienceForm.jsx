@@ -62,7 +62,7 @@ function AgeExperienceForm() {
         value={age}
         onChange={(e) => setAge(e.target.value)}
         placeholder="Enter your age here..."
-        required
+        // required
       />
 
       <label htmlFor="yearsOfExperience">YEARS OF EXPERIENCE:</label>
@@ -72,7 +72,7 @@ function AgeExperienceForm() {
         value={yearsOfExperience}
         onChange={(e) => setYearsOfExperience(e.target.value)}
         placeholder="Enter years of experience..."
-        required
+        // required
       />
 
       {discountRate !== null && (
