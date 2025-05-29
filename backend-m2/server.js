@@ -1,12 +1,3 @@
-const express = require('express');
-const cors = require('cors');
-
-require('dotenv').config();
-
-// Kerry
-const calculatePremium = require("./api/api3-kerry/quoteCalculator");
-
- 
 // 1. Getting Our Tools Ready (Like gathering ingredients for a recipe)
 // Think of it as a special building kit for websites.
 const express = require("express");
@@ -37,10 +28,6 @@ const {
   calculateDiscountRate,
 } = require("./api/api4-sonny/calculateDiscountRate.js");
  
-//Sonny
-const {
-  calculateDiscountRate,
-} = require("./api/api4-sonny/calculateDiscountRate.js");
  
 // We bring in the 'carValueController'. This is like a special manager
 // for your car value calculations. It knows what to do when someone asks for a car value.
@@ -57,15 +44,10 @@ const carValueController = require("./api/api1-takashi/controllers/carValueContr
  
 // We create our main website application using 'express'.
 // This 'app' variable is now our website's brain!
-const app = express();
  
 // --- Loading "Fake" Car Data for Testing (Like having toy cars to play with) ---
 // These files are like small lists of pretend car information.
 // We load them directly here because we'll just show them when someone asks for them.
-
-const carDataSingle = require('./jsondata/car_data_single_takashi.json');
-const carDataTakashi = require('./jsondata/car_data_takashi.json');
-const carDataTestTakashi = require('./jsondata/car_data_test_takashi.json'); 
 
 // This is like choosing which door number (port) your website will use on the internet.
 // It tries to use the number from the secret file (`process.env.PORT`), or it uses 3000 if there's no secret number.
