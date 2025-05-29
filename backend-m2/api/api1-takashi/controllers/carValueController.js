@@ -39,21 +39,30 @@ exports.handleCarValueRequest = (req, res) => {
     // We pull out the 'model' and 'year' from the car's message box.
     const { model, year } = requestBody;
 
-    // Kerry added this to make frontend work ------------------------------------
-    if (typeof model !== "string") {
-      return res.status(400).json({
-        error: "'model' must be a string.",
-        errorCode: "E_INVALID_MODEL_TYPE",
-      });
-    }
+// Kerry added this to make frontend work ------------------------------------
+// Validation for required model
+if (model === undefined) {
+  return res.status(400).json({
+    error: "Missing 'model' parameter.",
+    errorCode: "E_MISSING_MODEL",
+  });
+}
 
-    if (!/[a-zA-Z]/.test(model)) {
-      return res.status(400).json({
-        error: "'model' must contain at least one letter.",
-        errorCode: "E_INVALID_MODEL_FORMAT",
-      });
-    }
-    // --------------------------------------------------------------------------
+if (typeof model !== "string") {
+  return res.status(400).json({
+    error: "'model' must be a string.",
+    errorCode: "E_INVALID_MODEL_TYPE",
+  });
+}
+
+if (model.trim() === "") {
+  return res.status(400).json({
+    error: "Model cannot be empty.",
+    errorCode: "E_EMPTY_MODEL",
+  });
+}
+// --------------------------------------------------------------------------
+
 
     // Now, we try to use our "Car Value Calculator" machine.
     try {
