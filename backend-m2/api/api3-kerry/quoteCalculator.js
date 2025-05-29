@@ -45,8 +45,8 @@ function calculatePremium(car_value, risk_rating) {
 
   // Return premium values
   return {
-    monthly_premium: `$${monthly}`,
-    yearly_premium: `$${yearly}`,
+    monthly_premium: `${monthly}`,
+    yearly_premium: `${yearly}`,
   };
 }
 
