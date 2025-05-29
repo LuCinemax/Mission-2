@@ -89,7 +89,7 @@ app.get("/api/test-car-batch-mixed", (req, res) => {
 
 //-------------------------End of Takashi section----------------------------------------------------------------------
 
-const keywords = ["Crash", "Scratch", "Collide", "Bump", "Smash"];
+const keywords = ["crash", "scratch", "collide", "bump", "smash"];
 const maxKeywords = 5
 const noKeywords = 0
 // Wisony — API 2: Risk Rating
